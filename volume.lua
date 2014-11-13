@@ -6,8 +6,8 @@ function update_volume(widget)
    local status = fd:read("*all")
    fd:close()
 
-   local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
-   -- volume = string.format("% 3d", volume)
+   local volume = tonumber(string.match(status, "%[(%d+)%%%]"))
+   volume = string.format("%3d", volume)
 
    status = string.match(status, "%[(o[^%]]*)%]")
 
@@ -21,9 +21,9 @@ function update_volume(widget)
    local ib = volume * (eb - sb) + sb
    interpol_colour = string.format("%.2x%.2x%.2x", ir, ig, ib)
    if string.find(status, "on", 1, true) then
-       volume = " <span background='#" .. interpol_colour .. "'>   </span>"
+       volume = " <span background='#" .. interpol_colour .. "'> Volume:" .. volume .."% </span>"
    else
-       volume = " <span color='red' background='#" .. interpol_colour .. "'> M </span>"
+       volume = " <span color='red' background='#" .. interpol_colour .. "'> Mute </span>"
    end
    widget:set_markup(volume)
 end
